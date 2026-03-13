@@ -1,0 +1,49 @@
+server:
+  port: 8080
+
+eureka:
+  client:
+    enabled: false
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+  application:
+    name: product-service
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://${DB_HOST}:3306/ordermsa?useSSL=true
+    username: admin
+    password: ${DB_PW}
+#    운영DB의 낮은 스펙과 msa의 많은 커넥션을 감안한 커넥션 축소 설정
+    hikari:
+      maximum-pool-size: 1
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MariaDBDialect
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+    show_sql: true
+  servlet:
+    multipart:
+      max-file-size: 1000MB
+      max-request-size: 1000MB
+  redis:
+    host: redis-service
+    port: 6379
+  kafka:
+    kafka-server: kafka-service:9092
+    consumer:
+#      카프카에서 그룹id는 컨슈머 그룹을 식별하는 ID로서, 동일한 그룹ID를 가진 컨슈머들은 메세지를 분담해서 consume
+      group-id: product-group
+
+#aws s3 접근하기위한 계정세팅
+aws:
+  credentials:    #유출되면 안됨!!!  --- 사용안할때는 aws에서 비활성화해두는게 좋음
+    access-key: xxxxx
+    secret-key: yyyyy
+  region: ap-northeast-2  #aws전세계 센터위치(아시아태평양(서울))
+  s3:
+    bucket1: lamps-board-profile-image    #용도에 따라 다른버킷을 사용할때 bucket2 같은 식으로 추가해서 사용할수도 있음

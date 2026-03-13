@@ -1,0 +1,29 @@
+# ingress-controller 설치 명령어
+# kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.1/deploy/static/provider/aws/deploy.yaml
+# aws lb -> ingress controller pod -> ingress -> service로의 라우팅
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ordersystem-ingress
+  namespace: lamps-ns
+  annotations:
+  # 여기서 지정한 것은 이 Ingress가 NGINX 기반 ingress controller에 의해 처리된다는 의미
+    kubernetes.io/ingress.class: nginx
+    
+spec:
+  tls:
+  - hosts:
+    - "server.lamps777.shop"
+    secretName: server-lamps777-shop-tls 
+  rules:
+  - host: server.lamps777.shop  # 설정하려는 도메인 이름.
+    http:
+      paths:
+      - path: /   #모놀리식에는 / 로 하나로 연결 
+        pathType: Prefix
+        backend:
+          service:
+            name: my-service
+            port:
+              number: 80

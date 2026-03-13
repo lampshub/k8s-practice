@@ -1,0 +1,44 @@
+server:
+  port: 8080
+
+eureka:
+  client:
+    enabled: false
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+  application:
+    name: member-service
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://${AWS_SECRET}:3306/ordermsa?useSSL=true
+    username: admin
+    password: ${DB_PW}
+#    운영DB의 낮은 스펙과 msa의 많은 커넥션을 감안한 커넥션 축소 설정
+    hikari:
+      maximum-pool-size: 1
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MariaDBDialect
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+    show_sql: true
+  redis:
+    host: redis-service #서비스명
+    port: 6379     #서비스포트
+
+jwt:
+  expiration: 30   #유효시간 30분. 자유롭게 설정 가능.
+  #  인코딩된 문자 32자 이상 필요.(특수문자) : base64 encoder 웹사이트 활용
+  #  beyondaccesstokensecretkeybeyondaccesstokensecretkeybeyondaccesstokensecretkey
+  secretKey: YmV5b25kYWNjZXNzdG9rZW5zZWNyZXRrZXliZXlvbmRhY2Nlc3N0b2tlbnNlY3JldGtleWJleW9uZGFjY2Vzc3Rva2Vuc2VjcmV0a2V5
+  expirationRt: 30000
+  secretKeyRt: YmV5b25kYWNjZXNzdG9rZW5zZWNyZXRrZXliZXlvbmRhY2Nlc3N0b2tlbnNlY3JldGtleWJleW9uZGFjY2Vzc3Rva2Vuc2VjcmV0a2V5
+
+#  logback의 로그레벨 : trace < debug < info < error 순서
+logging:
+  level:
+    root: info

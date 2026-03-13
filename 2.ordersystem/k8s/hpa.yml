@@ -1,0 +1,20 @@
+# 자동 오토스케일링
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler #hpa
+metadata:
+  name: order-backend-hpa
+  namespace: lamps-ns
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: ordersystem-deployment
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50  #부하의 임계치 50%설정
