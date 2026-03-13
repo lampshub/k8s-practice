@@ -13,7 +13,7 @@ spring:
     name: member-service
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://${AWS_SECRET}:3306/ordermsa?useSSL=true
+    url: jdbc:mariadb://${DB_HOST}:3306/ordermsa?useSSL=true
     username: admin
     password: ${DB_PW}
 #    운영DB의 낮은 스펙과 msa의 많은 커넥션을 감안한 커넥션 축소 설정
